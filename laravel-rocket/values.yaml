@@ -1,0 +1,59 @@
+# Default values for laravel-rocket.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 2
+
+image:
+  # please update your docker image
+  repository: your-laravel-rocket-sample
+  tag: v1
+  pullPolicy: IfNotPresent
+  envVars:
+    - name: DB_DATABASE
+      value: database # fix me
+    - name: DB_HOST
+      value: mysql # fix me
+    - name: DB_USERNAME
+      value: user # fix me
+    - name: DB_PASSWORD
+      value: password # fix me
+    - name: APP_KEY
+      value: base64:sample-key # fix me
+    - name: APP_ENV
+      value: development # fix me
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  path: /
+  hosts:
+    - chart-example.local
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.https://scontent.xx.fbcdn.net/v/t1.15752-0/p280x280/39589135_1912471879048090_7796517870296367104_n.png?_nc_cat=0&_nc_ad=z-m&_nc_cid=0&oh=ea62b6b729e162fc0f8d75120ffe6884&oe=5BF4E4B6
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mihttps://scontent.xx.fbcdn.net/v/t1.15752-0/p280x280/39589135_1912471879048090_7796517870296367104_n.png?_nc_cat=0&_nc_ad=z-m&_nc_cid=0&oh=ea62b6b729e162fc0f8d75120ffe6884&oe=5BF4E4B6
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

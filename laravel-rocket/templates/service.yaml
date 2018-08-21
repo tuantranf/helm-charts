@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "laravel-rocket.fullname" . }}
+  labels:
+    app: {{ template "laravel-rocket.name" . }}
+    chart: {{ template "laravel-rocket.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ template "laravel-rocket.name" . }}
+    release: {{ .Release.Name }}
