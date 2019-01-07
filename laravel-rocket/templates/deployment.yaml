@@ -19,26 +19,31 @@ spec:
         app: {{ template "laravel-rocket.name" . }}
         release: {{ .Release.Name }}
     spec:
+      volumes:
+        - name: {{ .Release.Name }}-{{ template "laravel-rocket.name" . }}-env
+          secret:
+            secretName: {{ .Release.Name }}-{{ template "laravel-rocket.name" . }}-{{ .Release.Time.Seconds }}-env
+        - name: apache-conf
+          configMap:
+            name: {{ template "laravel-rocket.fullname" . }}-{{ .Release.Time.Seconds }}-apache
+            items:
+            - key: vhost.conf
+              path: vhost.conf
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .Values.image.envVars }}
-          env:
-{{ toYaml .Values.image.envVars | indent 12 }}
-          {{- end }}
+          image: "{{ .Values.app.repository }}:{{ .Values.app.tag }}"
+          imagePullPolicy: {{ .Values.app.pullPolicy }}
+          volumeMounts:
+            - name: {{ .Release.Name }}-{{ template "laravel-rocket.name" . }}-env
+              mountPath: /var/www/html/.env
+              subPath: .env
+            - name: apache-conf
+              mountPath: /etc/apache2/sites-enabled/vhost.conf
+              subPath: vhost.conf
           ports:
             - name: http
               containerPort: 80
               protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- with .Values.nodeSelector }}

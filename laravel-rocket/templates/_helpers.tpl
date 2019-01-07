@@ -30,3 +30,10 @@ Create chart name and version as used by the chart label.
 {{- define "laravel-rocket.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{/*
+Create dotenv file from environment varibales
+*/}}
+{{- define "dotenv" -}}
+{{- range $key, $val := . }}{{ $key }}={{ $val }}\n{{- end }}
+{{- end -}}

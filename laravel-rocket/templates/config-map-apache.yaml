@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+  name: {{ template "laravel-rocket.fullname" . }}-{{ .Release.Time.Seconds }}-apache
+  labels:
+    app: {{ template "laravel-rocket.name" . }}
+    chart: {{ template "laravel-rocket.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  vhost.conf: |-
+{{ .Files.Get "vhost.conf" | indent 4 }}
