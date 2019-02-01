@@ -3,11 +3,31 @@ entries:
   laravel-rocket:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2019-01-07T06:35:15.22605748Z
+    created: 2019-02-01T04:49:37.254871863Z
     description: A Helm chart for Kubernetes
-    digest: 9ab4f2bd5386a358d4912bdc3dee6f0327b600898465aa2a5726a07d9207e4ca
+    digest: e28176ea7db8ec4d58978616551b26414c28d8e0fd4eacefc5467b5256379696
     name: laravel-rocket
     urls:
     - laravel-rocket/laravel-rocket-0.2.0.tgz
     version: 0.2.0
-generated: 2019-01-07T06:35:15.225658306Z
+  podder-pipeline:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: 2019-02-01T04:49:37.255130741Z
+    description: A Helm chart for Podder pipeline to Kubernetes
+    digest: 1fac3d6d1a3b5b274ea829384f7445f76f9557d6ebfa7f9e871a490cf0d086b1
+    name: podder-pipeline
+    urls:
+    - podder-pipeline/podder-pipeline-0.0.1.tgz
+    version: 0.0.1
+  podder-task-bean:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: 2019-02-01T04:49:37.255358559Z
+    description: A Helm chart for Podder task bean Kubernetes
+    digest: d10934dbbf37f1adc6e6c8a9bf227f59c418fd4c22c60479f18971e57c525d69
+    name: podder-task-bean
+    urls:
+    - podder-task-bean/podder-task-bean-0.0.1.tgz
+    version: 0.0.1
+generated: 2019-02-01T04:49:37.254420248Z
