@@ -1,0 +1,29 @@
+{{- if and .Values.sharedVolume.persistence.enabled (not .Values.sharedVolume.persistence.existingClaim) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "podder-pipeline.fullname" . }}-pvc
+{{- with .Values.sharedVolume.persistence.annotations  }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+  labels:
+    app: {{ template "podder-pipeline.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  volumeMode: Filesystem
+  accessModes:
+    - {{ .Values.sharedVolume.persistence.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.sharedVolume.persistence.size | quote }}
+{{- if .Values.sharedVolume.persistence.storageClass }}
+{{- if (eq "-" .Values.sharedVolume.persistence.storageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: "{{ .Values.sharedVolume.persistence.storageClass }}"
+{{- end }}
+{{- end }}
+{{- end }}

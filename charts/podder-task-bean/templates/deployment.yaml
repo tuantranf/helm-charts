@@ -1,0 +1,60 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "podder-task-bean.fullname" . }}
+  labels:
+    app: {{ template "podder-task-bean.name" . }}
+    chart: {{ template "podder-task-bean.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "podder-task-bean.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "podder-task-bean.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      volumes:
+        - name: {{ .Release.Name }}-{{ template "podder-task-bean.name" . }}-shared-volume
+          {{- if .Values.sharedVolume.hostPath }}
+          hostPath:
+            path: {{ .Values.sharedVolume.hostPath }}
+          {{- else }}{{- if .Values.sharedVolume.persistentVolumeClaim }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.sharedVolume.persistentVolumeClaim }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+          {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.app.repository }}:{{ .Values.app.tag }}"
+          imagePullPolicy: {{ .Values.app.pullPolicy }}
+          env:
+{{ .Values.app.envVars | toYaml | indent 12 }}
+          volumeMounts:
+            - name: {{ .Release.Name }}-{{ template "podder-task-bean.name" . }}-shared-volume
+              mountPath: /usr/local/poc_base/shared
+          ports:
+            - name: grpc
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
